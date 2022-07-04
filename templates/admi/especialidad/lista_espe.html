@@ -1,0 +1,18 @@
+{% extends 'admi/lista_admi.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'espe/list.js' %}"></script>
+{% endblock %}
+    {% block colums %}
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Opciones</th>
+
+        </tr>
+    {% endblock %}
+
+    {% block rows %}
+
+    {% endblock %}

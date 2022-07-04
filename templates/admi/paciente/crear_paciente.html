@@ -1,0 +1,118 @@
+{% extends 'admi/form_admin.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block head %}
+    <link href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+    <script src="{% static 'user/js/form.js' %}"></script>
+{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+
+
+    <form class ="needs-validation" novalidate method="POST" enctype="multipart/form-data" autocomplete="off">
+						{% csrf_token %}
+						<div class="section">
+                            <h4>Datos de Paciente</h4>
+							<p>Ingresa los datos del paciente para el ingreso a la plataforma</p>
+							<div class="mb-3">
+								<label for="nombreUsuario" class="form-label">Nombre de Usuario:</label>
+								{{ usuarioForm.username |add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Ingrese el username' }}
+								{{ usuarioForm.username.errors }}
+							</div>
+
+                            <div class="mb-3">
+                                    <label for="email" class="form-label">Correo:</label>
+                                    {{ usuarioForm.email |add_class:'form-control'|attr:'placeholder:nombre@ejemplo.com' }}
+								    {{ usuarioForm.email.errors }}
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <label for="password" class="form-label">Contraseña:</label>
+                                    {{ usuarioForm.password|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Ingrese una contraseña' }}
+								    {{ usuarioForm.password.errors }}
+                                </div>
+
+                                <div class="col">
+                                    <label for="password2" class="form-label">Repita la contraseña:</label>
+                                    {{ usuarioForm.passwordCheck|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Repita la contraseña' }}
+    								{{ usuarioForm.passwordCheck.errors }}
+                                </div>
+
+                            </div>
+						</div>
+                        <br>
+                        <div class="section">
+							<h4>Datos Personales</h4>
+							<p>Ingresa los datos personales del paciente</p>
+							<div class="row">
+								<div class="col">
+									<label for="first_name" class="form-label">Nombres:</label>
+                                    {{ usuarioForm.first_name|add_class:'form-control'|attr:'placeholder:Ingrese los nombres del paciente' }}
+									{{ usuarioForm.first_name.errors }}
+								</div>
+                                <div class="col">
+									<label for="last_name" class="form-label">Apellidos:</label>
+                                    {{ usuarioForm.last_name|add_class:'form-control'|attr:'placeholder:Ingrese los apellidos del paciente' }}
+									{{ usuarioForm.last_name.errors }}
+								</div>
+							</div>
+                            <div class="row">
+								<div class="col">
+									<label for="cedula" class="form-label">Cédula:</label>
+                                    {{ pacienteForm.cedula|add_class:'form-control'|attr:'placeholder:Ingrese el número de cédula' }}
+									{{ pacienteForm.cedula.errors }}
+								</div>
+                                <div class="col">
+									<label for="direccion" class="form-label">Dirección:</label>
+                                    {{ pacienteForm.direccion|add_class:'form-control'|attr:'placeholder:Ingrese la dirección del paciente' }}
+									{{ pacienteForm.direccion.errors }}
+								</div>
+							</div>
+                            <div class="row">
+								<div class="col">
+									<label for="telefono" class="form-label">Celular:</label>
+                                    {{ pacienteForm.telefono|add_class:'form-control'|attr:'placeholder:Ingrese su número de celular' }}
+									{{ pacienteForm.telefono.errors }}
+								</div>
+                                <div class="col">
+									<label for="genero" class="form-label">Género:</label>
+                                    {{ pacienteForm.genero|add_class:'form-control' }}
+									{{ pacienteForm.genero.errors }}
+								</div>
+							</div>
+                            <div class="row">
+                                <div class="col">
+									<label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
+                                    {{ pacienteForm.fecha_nacimiento }}
+									{{ pacienteForm.fecha_nacimiento.errors }}
+								</div>
+                                <div class="col">
+									<label for="ciudad_red" class="form-label">Ciudad de Residencia:</label>
+                                    {{ pacienteForm.ciudad_red|add_class:'form-control' }}
+									{{ pacienteForm.ciudad_red.errors }}
+								</div>
+                            </div>
+							<div class="mb-3">
+                                {{ usuarioForm.image|add_class:'form-control' }}
+                                {{ usuarioForm.image.errors }}
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+							    <button type="reset" value="reset" class="btn btn-secondary btn-flat">Limpiar</button>
+							    </div>
+                                <div class="col">
+                                <button  type="submit" class="btn btn-primary btn-flat" > <i class="fas fa-save"></i> Guardar </button>
+                                </div>
+                            </div>
+                            <br>
+
+						</div>
+
+					</form>
+    </div>
+{% endblock %}

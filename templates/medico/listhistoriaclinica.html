@@ -1,0 +1,40 @@
+{% extends 'medico/listMedi.html' %}
+
+{% block colums %}
+        <tr>
+            <th>ID</th>
+            <th>Cita</th>
+            <th>Exámenes</th>
+            <th>Receta</th>
+            <th>Opciones</th>
+
+        </tr>
+    {% endblock %}
+
+    {% block rows %}
+        {% for hist in object_list %}
+    <tr>
+        <td>{{ hist.id }}</td>
+        <td>{{ hist.id_cita}}</td>
+        <td>{% for examen in hist.examen.all %}
+            Examen: {{ examen.nombre }}
+            Examen: {{ examen.descrip }}
+            {% endfor %}
+        </td>
+
+        <td>
+            {% for receta in hist.receta.all %}
+            Receta: {{ receta.medicamento }}
+            Receta: {{ receta.descripcion }}
+            {% endfor %}
+        </td>
+        <td>
+        <a href="{% url 'medico:editar_hist' hist.id %}" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a>
+        <a href="{% url 'medico:eliminar_hist' hist.id %}" type="button" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a>
+        <a href="{% url 'medico:receta_pdf' hist.id %}"  target="_blank" type="button" class="btn btn-info btn-xs btn-flat"><i class="fas fa-file-pdf"></i></a>
+
+        </td>
+
+    </tr>
+        {% endfor %}
+    {% endblock %}

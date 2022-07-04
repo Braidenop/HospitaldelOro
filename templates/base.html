@@ -1,0 +1,79 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Hospital Básico del Oro </title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="{% static 'lib/dentcare/img/favicon.ico' %}" rel="icon">
+    <!-- Fuentes de Google -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Estilos de Iconos -->
+    <link href="{% static 'lib/dentcare/css/all.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/dentcare/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/fontawesome/css/fontawesome.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/fontawesome/css/brands.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/fontawesome/css/solid.css' %}" rel="stylesheet">
+
+    <!-- Otras Librerias -->
+    <link href="{% static 'lib/dentcare/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/dentcare/lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/dentcare/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'lib/dentcare/lib/twentytwenty/twentytwenty.css' %}" rel="stylesheet" />
+
+    <!-- Estilo de Bootstrap -->
+    <link href="{% static 'lib/dentcare/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Estilos de plantilla -->
+    <link href="{% static 'lib/dentcare/css/style.css' %}" rel="stylesheet">
+
+    <!-- Estilo de FullCalendar -->
+    <link href="{% static 'lib/fullcalendar/main.css' %}" rel="stylesheet">
+    <!-- Estilos de DataTable -->
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/daterangepicker-master/daterangepicker.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/plugins/buttons-1.6.1/css/buttons.bootstrap.min.css' %}"/>
+
+</head>
+<body>
+{% block content %}
+
+{% endblock %}
+</body>
+
+ <!-- Librerías de Javascript -->
+    <script src="{% static 'lib/dentcare/js/jquery-3.4.1.min.js' %}"></script>
+    <script src="{% static 'lib/dentcare/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'lib/dentcare/lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/dentcare/lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/dentcare/lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/dentcare/lib/owlcarousel/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'lib/dentcare/lib/tempusdominus/js/moment.min.js' %}"></script>
+    <script src="{% static 'lib/dentcare/lib/tempusdominus/js/moment-timezone.min.js' %}"></script>
+    <script src="{% static 'lib/dentcare/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+    <script src="{% static 'lib/dentcare/lib/twentytwenty/jquery.event.move.js' %}"></script>
+    <script src="{% static 'lib/dentcare/lib/twentytwenty/jquery.twentytwenty.js' %}"></script>
+    <script src="{% static 'lib/admi/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'lib/dentcare/js/main.js' %}"></script>
+<!-- Bloque para aumentar librerias  -->
+    {% block head_pac %}
+
+    {% endblock %}
+    <!-- Script para Full Calendar  -->
+    {% block JSextra %}
+
+    {% endblock %}
+</html>

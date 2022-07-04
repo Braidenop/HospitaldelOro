@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Hospital del Oro | Plataforma Medicos </title>
+        <script src="{% static 'lib/admi/vendor/jquery/jquery.min.js' %}"></script>
+        <script src="{% static 'lib/admi/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <link href="{% static 'lib/admi/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
+        <!-- Core theme JS-->
+        <script src="{% static 'lib/plantillaMedico/js/scripts.js' %}"></script>
+        <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.js' %}"></script>
+        <link rel="icon" type="image/x-icon" href="{% static 'lib/plantillaMedico/assets/favicon.ico' %}" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="{% static 'lib/plantillaMedico/css/styles.css' %}" rel="stylesheet" />
+        <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}"/>
+        <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}"/>
+
+        <script src="{% static 'lib/datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
+        <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
+        <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+
+        {% block head_med %}
+
+        {% endblock %}
+    </head>
+    <body id="page-top">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+            <div class="container px-4">
+                <a class="navbar-brand" href="#page-top">Hospital Básico del Oro</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ms-auto">
+                        {% if request.user.is_active %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'medico:citas' %}">Citas Planificadas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#services">Perfil</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'medico:lista_hist' %}">Consultas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#services" style="color: blanchedalmond;">Bienvenido {{ request.user.username }}</a></li>
+                        <li class="nav-item"><a class="nav-link btn btn-danger mt-1 mx-1" href="{% url "medico:logout_medico" %}">Salir</a></li>
+                        {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'medico:login_medico' %}">Iniciar Sesión </a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {% block content %}
+        <section id="about">
+        <header class="bg-primary bg-gradient text-white">
+            <div class="container px-4 text-center">
+                <h1 class="fw-bolder">Bienvenido </h1>
+                <p class="lead">En este espacio podrás visualizar las citas que tienes planificadas</p>
+                <a class="btn btn-lg btn-light" href="{% url 'medico:citas' %}">Citas Planificadas</a>
+            </div>
+        </header>
+        </section>
+
+        {% endblock %}
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container px-4"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>
+        </footer>
+        <!-- Bootstrap core JS-->
+
+    </body>
+</html>

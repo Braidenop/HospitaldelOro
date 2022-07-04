@@ -1,0 +1,26 @@
+{% extends 'admi/lista_admi.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'medico/list.js' %}"></script>
+{% endblock %}
+    {% block colums %}
+        <tr>
+            <th scope="col">Nro</th>
+            <th scope="col">Nombres</th>
+            <th scope="col">Username</th>
+            <th scope="col">Fecha de nacimiento</th>
+            <th scope="col">Edad</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Cédula</th>
+            <th scope="col">Dirección</th>
+            <th scope="col">Ciudad de Residencia</th>
+            <th scope="col">Genero</th>
+            <th scope="col">Opciones</th>
+
+
+        </tr>
+    {% endblock %}
+
+    {% block rows %}
+
+    {% endblock %}

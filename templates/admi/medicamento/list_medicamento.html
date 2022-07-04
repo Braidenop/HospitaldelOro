@@ -1,0 +1,20 @@
+{% extends 'admi/lista_admi.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'js/medicamento.js' %}"></script>
+{% endblock %}
+    {% block colums %}
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Presentación</th>
+            <th>Volumen</th>
+            <th>Descripción</th>
+            <th>Opciones</th>
+
+        </tr>
+    {% endblock %}
+
+    {% block rows %}
+
+    {% endblock %}

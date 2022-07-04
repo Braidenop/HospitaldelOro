@@ -1,0 +1,20 @@
+{% extends 'admi/lista_admi.html' %}
+{% load static %}
+{% block head_list %}
+    <script src="{% static 'medico/list_dispo.js' %}"></script>
+{% endblock %}
+    {% block colums %}
+        <tr>
+            <th>ID</th>
+            <th>Nombre Medico</th>
+            <th>Especialidad</th>
+            <th>Dia de Trabajo</th>
+            <th>Horario de Trabajo</th>
+            <th>Consultorio</th>
+            <th>Opciones</th>
+        </tr>
+    {% endblock %}
+
+    {% block rows %}
+
+    {% endblock %}

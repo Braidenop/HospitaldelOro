@@ -1,0 +1,99 @@
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ingreso HBO </title>
+    <!-- Estilos para Pantalla de Logueo -->
+    <link rel="stylesheet" href="{% static 'lib/login/css/styles.css' %}" />
+    <link rel="stylesheet" href="{% static 'lib/login/css/mdb.rtl.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'lib/login/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'lib/login/css/mdb.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'lib/login/js/mdb.min.js' %}" />
+    <link href="{% static 'lib/fontawesome/css/fontawesome.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/fontawesome/css/brands.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/fontawesome/css/solid.css' %}" rel="stylesheet">
+
+</head>
+<body>
+
+<section class="vh-60">
+  <div class="container-fluid h-custom">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-md-9 col-lg-6 col-xl-5">
+         <a href="{% url 'citas:homePaciente' %}"><img src="{% static 'lib/login/img/Hospital Básico del Oro.png' %}" class="img-fluid"
+          alt="Sample image" > </a>
+      </div>
+
+      {% block content %}
+      <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+          <!-- Formulario de Logueo-->
+          <form method="POST" action="" class="form-signin" autocomplete="off">
+          {% csrf_token %}
+
+          <!-- Username input -->
+          <div class="form-outline mb-4">
+             <label class="form-label" for="form3Example3">Usuario</label>
+              <input type="text" id="form3Example3" class="form-control form-control-lg"
+              placeholder="Usuario"  name="username" required />
+          </div>
+
+          <!-- Password input -->
+          <div class="form-outline mb-3">
+              <label class="form-label" for="form3Example4">Password</label>
+              <input type="password" id="form3Example4" class="form-control form-control-lg"
+              placeholder="Contraseña" name="password" required />
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <!-- Checkbox -->
+            <div class="form-check mb-0">
+              <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3" />
+              <label class="form-check-label" for="form2Example3">
+                Recordar Usuario
+              </label>
+            </div>
+          </div>
+
+          <div class="text-center text-lg-start mt-4 pt-2">
+            <button type="submit" class="btn btn-primary btn-lg"
+              style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
+            <p class="small fw-bold mt-2 pt-1 mb-0">No tienes una cuenta? <a href="{% url 'citas:registro' %}"
+                class="link-danger">Registrate</a></p>
+          </div>
+               {% if form.errors %}
+                  {% for field in form %}
+                  {% for error in field.errors %}
+                  <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                  </div>
+                  {% endfor %}
+                  {% endfor %}
+                   {% for error in form.non_field_errors %}
+                     <div class="alert alert-danger">
+                         <strong>{{ error|escape }}</strong>
+                     </div>
+                     {% endfor %}
+                 {% endif %}
+        </form>
+      </div>
+        {% endblock %}
+    </div>
+  </div>
+
+</section>
+
+
+</body>
+
+<footer class="bg-light text-center text-lg-start">
+    <div class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
+    <!-- Copyright -->
+        <div class="text-white mb-3 mb-md-0">
+          Copyright ©  All rights reserved.
+        </div>
+    </div>
+</footer>
+
+</html>

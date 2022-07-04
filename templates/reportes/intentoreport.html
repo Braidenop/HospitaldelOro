@@ -1,0 +1,38 @@
+{% extends 'admi/lista_admi.html' %}
+{% load static %}
+{% block head_list %}
+
+    <script src="{% static 'paciente/intento.js' %}"></script>
+{% endblock %}
+
+
+
+   {% block colums %}
+        <tr>
+            <th>ID</th>
+            <th>Paciente</th>
+            <th>Medico</th>
+            <th>Especialidad</th>
+            <th>Día de atención</th>
+            <th>Hora</th>
+            <th>Consultorio</th>
+            <th>Fecha</th>
+            <th>Motivo</th>
+            <th>Opciones</th>
+
+        </tr>
+    {% endblock %}
+
+    {% block rows %}
+
+    {% endblock %}
+
+    {% block form %}
+
+        <form method="POST">
+                        <label>Rango de fechas:</label>
+                        {{ form }}
+                        <label>Rango de fechas:</label>
+                        {{ form }}
+                    </form>
+    {% endblock %}

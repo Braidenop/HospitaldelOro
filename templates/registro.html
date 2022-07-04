@@ -1,0 +1,111 @@
+{% extends 'login.html' %}
+{% load widget_tweaks %}
+    {% block content %}
+    <div class="col-lg-5 col-xl-7">
+    <div class="container-fluid ">
+		<h4>Datos de Usuario</h4>
+		<p>
+			Ingresa tu nombre de usuario, correo y contraseña que utilizarás para iniciar sesión.
+		</p>
+		<form class ="needs-validation" novalidate method="POST" enctype="multipart/form-data" autocomplete="off">
+			{% csrf_token %}
+			<div class="section">
+				<div class="mb-3">
+					<label for="nombreUsuario" class="form-label">Nombre de Usuario:</label>
+					{{ usuarioForm.username |add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Ingrese su username' }}
+					{{ usuarioForm.username.errors }}
+				</div>
+
+                <div class="mb-3">
+                        <label for="email" class="form-label">Correo:</label>
+                        {{ usuarioForm.email |add_class:'form-control'|attr:'placeholder:nombre@ejemplo.com' }}
+					    {{ usuarioForm.email.errors }}
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="password" class="form-label">Contraseña:</label>
+                        {{ usuarioForm.password|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Ingrese una contraseña' }}
+					    {{ usuarioForm.password.errors }}
+                    </div>
+
+                    <div class="col">
+                        <label for="password2" class="form-label">Repita la contraseña:</label>
+                        {{ usuarioForm.passwordCheck|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Repita su contraseña' }}
+    					{{ usuarioForm.passwordCheck.errors }}
+                    </div>
+
+                </div>
+			</div>
+            <br>
+            <div class="section">
+				<h4>Datos de Paciente</h4>
+				<p>Ingresa tus datos personales, para las citas y las consultas.</p>
+				<div class="row">
+					<div class="col">
+						<label for="first_name" class="form-label">Nombres:</label>
+                        {{ usuarioForm.first_name|add_class:'form-control'|attr:'placeholder:Ingrese sus nombres' }}
+						{{ usuarioForm.first_name.errors }}
+					</div>
+                    <div class="col">
+						<label for="last_name" class="form-label">Apellidos:</label>
+                        {{ usuarioForm.last_name|add_class:'form-control'|attr:'placeholder:Ingrese sus apellidos' }}
+						{{ usuarioForm.last_name.errors }}
+					</div>
+			    </div>
+                <div class="row">
+					<div class="col">
+						<label for="cedula" class="form-label">Cédula:</label>
+                        {{ pacienteForm.cedula|add_class:'form-control'|attr:'placeholder:Ingrese su cédula' }}
+						{{ pacienteForm.cedula.errors }}
+					</div>
+                    <div class="col">
+						<label for="direccion" class="form-label">Dirección:</label>
+                        {{ pacienteForm.direccion|add_class:'form-control'|attr:'placeholder:Ingrese sus dirección domiciliaria' }}
+						{{ pacienteForm.direccion.errors }}
+					</div>
+				</div>
+                <div class="row">
+					<div class="col">
+						<label for="telefono" class="form-label">Celular:</label>
+                        {{ pacienteForm.telefono|add_class:'form-control'|attr:'placeholder:Ingrese su número de celular' }}
+						{{ pacienteForm.telefono.errors }}
+					</div>
+                    <div class="col">
+						<label for="genero" class="form-label">Género:</label>
+                        {{ pacienteForm.genero|add_class:'form-select' }}
+						{{ pacienteForm.genero.errors }}
+					</div>
+				</div>
+                <div class="row">
+                    <div class="col">
+						<label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
+                        {{ pacienteForm.fecha_nacimiento }}
+						{{ pacienteForm.fecha_nacimiento.errors }}
+					</div>
+                    <div class="col">
+						<label for="ciudad_red" class="form-label">Ciudad de Residencia:</label>
+                        {{ pacienteForm.ciudad_red|add_class:'form-control' }}
+						{{ pacienteForm.ciudad_red.errors }}
+					</div>
+                </div>
+				<div class="mb-3">
+                    {{ usuarioForm.image|add_class:'form-control' }}
+                    {{ usuarioForm.image.errors }}
+                </div>
+
+                <div class="row">
+                    <div class="col">
+				    <button type="reset" value="reset" class="waves-effect waves-light btn">Limpiar</button>
+				    </div>
+                    <div class="col">
+                    <button  type="submit" class=" waves-effect waves-light btn btn alert-danger" >Registrarse</button>
+                    </div>
+                </div>
+                <br>
+			</div>
+
+		</form>
+	</div>
+    </div>
+    {% endblock %}

@@ -1,0 +1,108 @@
+{% extends 'homePaciente.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block contentPa %}
+    <!-- Agendar una Cita -->
+    <div class="container-fluid px-1 py-5 mx-auto ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-xl-4 col-lg-2 col-md-5 col-11 text-center">
+                <div class="card ">
+                    <div class="row " >
+                       <h3>Agenda una Cita</h3>
+                    </div>
+                <!-- Form start -->
+                 <form method="POST" class="form-card" >
+                    {% csrf_token %}
+                   <div class="row justify-content-between text-left">
+                       <div class="form-group  flex-column d-flex">
+                       <label class="form-control-label  px-3" for="esp_medic"> Disponibilidad </label>
+                         {{ form.esp_medic|add_class:'form-control'}}
+                       </div>
+                   </div>
+                   <div class="row justify-content-between text-left">
+                       <div class="form-group col-md-12  flex-column d-flex">
+                       <label class="form-control-label  px-3" for="fecha_cita"> Fecha Cita </label>
+                       <input id="fecha_cita" type="text" name="fecha_cita" >
+                       </div>
+                   </div>
+                   <div class="row justify-content-between text-left">
+                       <div class="form-group   flex-column d-flex">
+                       <label for="motivo"> Motivo </label>
+                       {{ form.motivo|add_class:'form-control' }}
+                       </div>
+                   </div>
+
+                   <div class="row justify-content-end">
+                       <div class="form-group  ">
+                        <button type="submit" class="btn btn alert-danger" > Aceptar </button>
+                        <button class="btn btn badge-success" > <a href="{% url 'citas:lista_citas' %}">Volver </a> </button>
+                        </div>
+                   </div>
+                </form>
+                <!-- Form end-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block JSextra %}
+    <script>
+
+
+    $(document).ready(function () {
+                var date = new Date();
+                var currentMonth = date.getMonth();
+                var currentDate = date.getDate();
+                var currentYear = date.getFullYear();
+                $('input[name="fecha_cita"]').daterangepicker({
+                    minDate: new Date(currentYear, currentMonth, currentDate)
+                    , singleDatePicker: true
+                    , dateFormat: 'yy-mm-dd'
+                    , startDate: moment(date)
+                    , endDate: moment(date)
+                    , locale: {
+                            "separator": " - ",
+                            "applyLabel": "Aplicar",
+                            "cancelLabel": "Cancelar",
+                            "fromLabel": "DE",
+                            "toLabel": "HASTA",
+                            "customRangeLabel": "Custom",
+                            "daysOfWeek": [
+                                "Dom",
+                                "Lun",
+                                "Mar",
+                                "Mie",
+                                "Jue",
+                                "Vie",
+                                "Sáb"
+                            ],
+                            "monthNames": [
+                                "Enero",
+                                "Febrero",
+                                "Marzo",
+                                "Abril",
+                                "Mayo",
+                                "Junio",
+                                "Julio",
+                                "Agosto",
+                                "Septiembre",
+                                "Octubre",
+                                "Noviembre",
+                                "Diciembre"
+                            ],
+                            "firstDay": 1
+                    }
+                });
+            });
+
+    </script>
+
+    <script type="text/javascript" src="{% static 'lib/daterangepicker-master/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/daterangepicker-master/moment.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/daterangepicker-master/daterangepicker.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/daterangepicker-master/daterangepicker.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
+
+
+{% endblock %}

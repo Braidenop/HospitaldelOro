@@ -1,0 +1,105 @@
+{% extends 'medico/homeMedico.html' %}
+
+{% block content %}
+<section id="about">
+      <div class="container px-4">
+        <div class="row gx-4 justify-content-center">
+          <div class="col-lg-8">
+                <div class="row">
+                   <div class="col-12">
+			         <div class="card">
+                         <div class="row " >
+                         <h4>Datos de Usuario</h4>
+					    <p>
+						Ingresa tu nombre de usuario, correo y contraseña que utilizaras para iniciar sesión.
+					    </p>
+                         </div>
+					    <form class ="col s12" method="POST" enctype="multipart/form-data">
+						    {% csrf_token %}
+						<div class="row justify-content-between text-left">
+                          <div class="form-group  flex-column d-flex">
+                            <div class="section">
+							<div class="input-field col s6">
+								<label>Nombre de Usuario:</label>
+								{{ usuarioForm.username }}
+								{{ usuarioForm.username.errors }}
+							</div>
+							<div class="input-field col s6">
+								<label>Correo:</label>
+								{{ usuarioForm.email }}
+								{{ usuarioForm.email.errors }}
+							</div>
+							<div class="input-field col s6">
+								<label>Contraseña:</label>
+								{{ usuarioForm.password }}
+								{{ usuarioForm.password.errors }}
+							</div>
+							<div class="input-field col s6">
+								<label>Repite la contraseña:</label>
+								{{ usuarioForm.passwordCheck }}
+								{{ usuarioForm.passwordCheck.errors }}
+							</div>
+						    </div>
+                          </div>
+                         </div>
+						<div class="section">
+							<h4>Datos de Medico</h4>
+							<p>Ingresa tus datos personales</p>
+							<div class="row">
+								<div class="input-field col s6">
+									<label>Nombre</label>
+									{{ medicoForm.nombre }}
+									{{ medicoForm.nombre.errors }}
+								</div>
+								<div class="input-field col s6">
+									<label>Apellido</label>
+									{{ medicoForm.apellido }}
+									{{ medicoForm.apellido.errors }}
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-field col s6">
+									<label>Cedula</label>
+									{{ medicoForm.cedula }}
+									{{ medicoForm.cedula.errors }}
+								</div>
+								<div class="input-field col s6">
+									<label>Dirección</label>
+                                    {{ medicoForm.direccion }}
+									{{ medicoForm.direccion.errors }}
+								</div>
+							</div>
+							<div class="row">
+								<div class="input-field col s12">
+							      {{ medicoForm.foto }}
+							      {{ medicoForm.foto.errors }}
+							    </div>
+								<div class="input-field col s6">
+                                    <label>Genero</label>
+									{{ medicoForm.genero }}
+									{{ medicoForm.genero.errors }}
+								</div>
+
+								<div class="input-field col s6">
+									<label>Telefono</label>
+									{{ medicoForm.telefono }}
+									{{ medicoForm.telefono.errors }}
+								</div>
+							</div>
+							<div class="input-field center-align">
+							<button type="reset" value="reset" class="waves-effect waves-light btn">Limpiar</button>
+
+							</div>
+                            <div class="text-center text-lg-start mt-2 pt-2">
+                            <button  type="submit" class=" waves-effect waves-light btn btn alert-danger" >Registrarse</button>
+                            </div>
+						</div>
+                        </form>
+			         </div>
+			       </div>
+		  </div>
+	    </div>
+      </div>
+   </div>
+</section>
+{% endblock %}

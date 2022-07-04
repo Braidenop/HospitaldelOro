@@ -1,0 +1,86 @@
+{% extends 'admi/homeAdmi.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}"/>
+    <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+{#    <script   src="{% static 'lib/moment-2.25.3/moment.js' %}"></script>#}
+{#    <script   src="{% static 'lib/daterangepicker-master/moment.min.js' %}"></script>#}
+{#    <script   src="{% static 'lib/daterangepicker-master/daterangepicker.js' %}"></script>#}
+{#    <link rel="stylesheet" href="{% static 'lib/daterangepicker-master/daterangepicker.css' %}"/>#}
+    <script src="{% static 'js/funcion.js' %}"></script>
+    {% block head_list %}
+
+    {% endblock %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+    <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">{{ title }}</h3>
+              </div>
+
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0" style="height: 700px;">
+                <table class="table table-head-fixed text-nowrap" id="data">
+                  <thead>
+                     {% block colums %}
+                     {% endblock %}
+                  </thead>
+                  <tbody>
+                    {% block rows %}
+
+                    {% endblock %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+    </div>
+
+            {% block form %}
+            {% endblock %}
+            <div class="card-footer">
+
+                <a href="{{ create_url }}" class="btn btn-primary btn-flat btnTest">
+                    <i class="fas fa-plus"></i> Nuevo registro
+                </a>
+                <a href="{{ list_url }}" class="btn btn-success btn-flat">
+                    <i class="fas fa-sync"></i> Actualizar
+                </a>
+
+            </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+{#    <script type="application/javascript">#}
+{##}
+{##}
+{#        $('.btnTest').on('click', function () {#}
+{#                $.ajax({#}
+{#                    url: '{% url 'citas:lista_citas' %}',#}
+{#                    type: 'POST',#}
+{#                    data: {id: 1},#}
+{#                    dataType: 'json'#}
+{#                }).done(function (data) {#}
+{#                    console.log(data);#}
+{#                }).fail(function (jqXHR, textStatus, errorThrown) {#}
+{#                    alert(textStatus + ': ' + errorThrown);#}
+{#                }).always(function (data) {#}
+{##}
+{#                });#}
+{#            });#}
+{##}
+{#    </script>#}
+{% endblock %}
