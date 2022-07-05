@@ -1,25 +1,18 @@
-from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_protect, csrf_exempt
-from django.views.generic import TemplateView, FormView, ListView, CreateView, UpdateView, DeleteView
-from medico.forms import RegistroMedicoForm, RegistroUsuarioForm, FormularioLogin, HistoriaForm
-from citas.models import Usuario, Medico, Cita, Paciente, Especialidad_Medico, Historiaclinica, Especialidad
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView, ListView, UpdateView, DeleteView
+from medico.forms import RegistroMedicoForm, RegistroUsuarioForm, HistoriaForm
+from citas.models import Usuario, Medico, Cita, Especialidad_Medico, Historiaclinica, Especialidad
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.decorators import permission_required
 from Intentocitas.mixins import PermisosMedicos
-import os
-from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-from django.contrib.staticfiles import finders
-
 from reportes.forms import ReportForm
 
 
@@ -39,13 +32,14 @@ class perfilMedico(TemplateView):
         # Se utiliza un values_list para encontrar el campo específico del modelo
         # el flat = True permite traerlo directamente sin los ('')
 
-        esp = Especialidad_Medico.objects.filter(id_medico__usuario_id=self.request.user.id)\
+        esp = Especialidad_Medico.objects.filter(id_medico__usuario_id=self.request.user.id) \
             .values_list('id_especialidad__nombre_esp', flat=True).distinct()
         context['medi'] = medi
         context['esp'] = esp
         return context
 
 
+# Vista para el Registro
 class RegistroMedico(TemplateView):
     template_name = 'medico/registroMedi.html'
 
@@ -81,6 +75,7 @@ class LogoutView(auth_views.LogoutView):
     next_page = '/'
 
 
+# Vista para Citas Agendadas
 class ListaCita(LoginRequiredMixin, PermisosMedicos, ListView):
     model = Cita
     template_name = 'medico/lista_citas.html'
@@ -119,9 +114,7 @@ class ListaCita(LoginRequiredMixin, PermisosMedicos, ListView):
         return context
 
 
-# Consulta
-
-# Cita
+#  Lista de Consultas
 
 class HistoriaList(LoginRequiredMixin, PermisosMedicos, ListView):
     model = Historiaclinica
@@ -137,6 +130,8 @@ class HistoriaList(LoginRequiredMixin, PermisosMedicos, ListView):
         return context
 
 
+# Crear una Consulta
+
 def hist_crear(request):
     if request.method == "POST":
         form = HistoriaForm(request.POST, request=request)
@@ -150,6 +145,7 @@ def hist_crear(request):
                                                           'list_url': reverse_lazy('medico:lista_hist'), })
 
 
+# Editar una Consulta
 class EditarHist(LoginRequiredMixin, PermisosMedicos, UpdateView):
     model = Historiaclinica
     template_name = 'medico/crear_historia.html'
@@ -170,6 +166,7 @@ class EditarHist(LoginRequiredMixin, PermisosMedicos, UpdateView):
         return context
 
 
+# Eliminar una consulta
 class EliminarHist(LoginRequiredMixin, PermisosMedicos, DeleteView):
     model = Historiaclinica
     template_name = 'medico/deletehist.html'
@@ -189,6 +186,7 @@ class EliminarHist(LoginRequiredMixin, PermisosMedicos, DeleteView):
         return context
 
 
+# Crear PDF de Receta
 class RecetaPDF(LoginRequiredMixin, PermisosMedicos, View):
     def get(self, request, *args, **kwargs):
         try:

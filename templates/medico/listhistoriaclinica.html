@@ -3,7 +3,11 @@
 {% block colums %}
         <tr>
             <th>ID</th>
-            <th>Cita</th>
+            <th>Nombre del Paciente</th>
+            <th>Especialidad</th>
+            <th>Día de Atención</th>
+            <th>Horario</th>
+            <th>Consultorio</th>
             <th>Exámenes</th>
             <th>Receta</th>
             <th>Opciones</th>
@@ -15,17 +19,30 @@
         {% for hist in object_list %}
     <tr>
         <td>{{ hist.id }}</td>
-        <td>{{ hist.id_cita}}</td>
-        <td>{% for examen in hist.examen.all %}
-            Examen: {{ examen.nombre }}
-            Examen: {{ examen.descrip }}
-            {% endfor %}
-        </td>
+        <td>{{ hist.id_cita.paciente}}</td>
+        <td>{{ hist.id_cita.esp_medic.id_especialidad.nombre_esp}}</td>
+        <td>{{ hist.id_cita.esp_medic.dia_laboral}}</td>
+        <td>{{ hist.id_cita.esp_medic.horario}}</td>
+        <td>{{ hist.id_cita.esp_medic.consul}}</td>
 
         <td>
-            {% for receta in hist.receta.all %}
-            Receta: {{ receta.medicamento }}
-            Receta: {{ receta.descripcion }}
+        {% for examen in hist.examen.all %}
+            <span class="badge badge-secondary"> {{ examen.nombre }}</span>
+        {% endfor %}
+        </td>
+
+        <td>{% for receta in hist.receta.all %}
+            <table>
+                <tbody>
+                        <tr>
+                            <td>{{ receta.medicamento.nombre }}</td>
+                            <td>{{ receta.medicamento.presentacion }}</td>
+                            <td>{{ receta.medicamento.volumen }}</td>
+                            <td>{{ receta.descripcion }}</td>
+                       </tr>
+                </tbody>
+            </table>
+
             {% endfor %}
         </td>
         <td>

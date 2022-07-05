@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <style>
     .img-invoice {
@@ -41,17 +41,45 @@
     {{ comp.address|upper }}
 </p>
 
-<b>Historia Clinica </b> N°{{ hist.id }}<br>
+<p>____________________________________________________________________________________________________________________</p>
+
+<h2> ID de Consulta N°{{ hist.id }} </h2>
+<h3> Fecha de Consulta : {{ hist.id_cita.fecha_cita }} </h3>
     </br>
+<p>____________________________________________________________________________________________________________________</p>
+<h2> Detalles de la Cita </h2>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg">
+            <h6> Nombre del Paciente: {{ hist.id_cita.paciente}} </h6>
+        </div>
+        <div class="col-lg">
+            <h6> Nombre de la Especialidad: {{ hist.id_cita.esp_medic.id_especialidad.nombre_esp}} </h6>
+        </div>
+        <div class="col-lg">
+            <h6> Nombre del Médico: {{ hist.id_cita.esp_medic.id_medico.usuario}} </h6>
+        </div>
+        <div class="col-lg">
+            <h6> Consultorio: {{ hist.id_cita.esp_medic.consul}} </h6>
+        </div>
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h6> Día de Atención: {{ hist.id_cita.esp_medic.dia_laboral}} </h6>
+            </div>
+            <div class="col-md-6"><h5> Horario: {{ hist.id_cita.esp_medic.horario}} </h5></div>
+
+        </div>
+    </div>
+</div>
+
     </br>
-<p><b>Detalles de cita </b></p>
-<p>{{ hist.id_cita }}</p>
-    </br>
+<p>____________________________________________________________________________________________________________________</p>
+
     </br>
 <p><b>Diagnóstico </b></p>
 <p>{{ hist.diagnostico }}</p>
 
-    </br>
     </br>
     </br>
     <table id="invoice">
@@ -65,7 +93,7 @@
     {% for examen in hist.examen.all %}
        <tr{% if forloop.first %} style="padding-top: 3px;" {% endif %}>
          <td>{{ examen.nombre }} </td>
-         <td>{{ examen.descrip }}</td>
+         <td style="width: 65%;">{{ examen.descrip }}</td>
         </tr>
     {% endfor %}
     </tbody>
@@ -77,14 +105,18 @@
     <thead>
     <tr>
         <th style="width: 20%;">MEDICAMENTO</th>
-        <th style="width: 15%;">INDICACIONES</th>
+        <th style="width: 20%;">PRESENTACIÓN</th>
+        <th style="width: 15%;">VOLUMEN - PESO </th>
+        <th style="width: 20%;">INDICACIONES</th>
     </tr>
     </thead>
     <tbody>
     {% for receta in hist.receta.all %}
        <tr{% if forloop.first %} style="padding-top: 3px;" {% endif %}>
-         <td>{{ receta.medicamento }} </td>
-         <td>{{ receta.descripcion }}</td>
+          <td>{{ receta.medicamento.nombre }}</td>
+           <td>{{ receta.medicamento.presentacion }}</td>
+           <td>{{ receta.medicamento.volumen }}</td>
+           <td>{{ receta.descripcion }}</td>
         </tr>
     {% endfor %}
     </tbody>
