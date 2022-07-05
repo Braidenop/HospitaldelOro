@@ -5,6 +5,7 @@ app_name = 'medico'
 
 urlpatterns = [
     path('', homeMedico.as_view(), name='home_medico'),
+    path('perfil', perfilMedico.as_view(), name='perfil_medico'),
     path('citas', ListaCita.as_view(), name='citas'),
     path('registro', RegistroMedico.as_view(), name='registro_medico'),
     # path('login', LoginMedico.as_view(), name='login_medico'),

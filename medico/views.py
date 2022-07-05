@@ -9,7 +9,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.generic import TemplateView, FormView, ListView, CreateView, UpdateView, DeleteView
 from medico.forms import RegistroMedicoForm, RegistroUsuarioForm, FormularioLogin, HistoriaForm
-from citas.models import Usuario, Medico, Cita, Paciente, Especialidad_Medico, Historiaclinica
+from citas.models import Usuario, Medico, Cita, Paciente, Especialidad_Medico, Historiaclinica, Especialidad
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import permission_required
 from Intentocitas.mixins import PermisosMedicos
@@ -26,10 +26,24 @@ from reportes.forms import ReportForm
 class homeMedico(LoginRequiredMixin, PermisosMedicos, TemplateView):
     template_name = 'medico/homeMedico.html'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['entity'] = Medico.objects.filter(usuario=self.request.user)
-    #     return context
+
+class perfilMedico(TemplateView):
+    models = Medico, Especialidad_Medico, Especialidad
+    template_name = 'medico/perfilmedico.html'
+
+    # Se envía el contexto que se renderizará en las etiquetas creadas.
+    def get_context_data(self, **kwargs):
+        context = super(perfilMedico, self).get_context_data(**kwargs)
+        medi = Medico.objects.filter(usuario_id=self.request.user.id).values()
+
+        # Se utiliza un values_list para encontrar el campo específico del modelo
+        # el flat = True permite traerlo directamente sin los ('')
+
+        esp = Especialidad_Medico.objects.filter(id_medico__usuario_id=self.request.user.id)\
+            .values_list('id_especialidad__nombre_esp', flat=True).distinct()
+        context['medi'] = medi
+        context['esp'] = esp
+        return context
 
 
 class RegistroMedico(TemplateView):

@@ -1,0 +1,57 @@
+{% extends 'medico/baseMedico.html' %}
+{% load static %}
+
+{% block content %}
+<section>
+    <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <img class="rounded-circle mt-5" width="150px" src="{{ request.user.image.url }}">
+                    <span class="font-weight-bold">{{ request.user.username }}</span>
+                    <span class="text-black-50">{{ request.user.email }}</span><span> </span>
+                </div>
+            </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Perfil de Usuario</h4>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-12"><h5> Nombres: {{ request.user.first_name }} </h5></div>
+                        <div class="col-md-12"><h5> Apellidos: {{ request.user.last_name }} </h5></div>
+                    </div>
+                    <!-- Se declara un ciclo para poder obtener resultados {'clave', 'valor'}  -->
+                    {% for x in medi %}
+                    <div class="row mt-4">
+                        <div class="col-md-6"><h5> Cédula: {{ x.cedula }} </h5></div>
+                        <div class="col-md-6"><h5> Edad: {{ x.edad }} </h5></div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">  <h5>   Celular: {{ x.telefono }} </h5></div>
+                    </div>
+
+                     <div class="row mt-4">
+                        <div class="col-md-12"><h5> Ciudad de Residencia: {{ x.ciudad_red }} </h5></div>
+                         <div class="col-md-12"><h5> Dirección: {{ x.direccion }} </h5></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center experience"><span><h4>Especialidades</h4></span></div><br>
+                    {% for x in esp %}
+                    <div class="col-md-12"> {{ x }} </div> <br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</section>
+
+
+{% endblock %}

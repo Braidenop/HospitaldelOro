@@ -46,7 +46,18 @@ function generate_report() {
             {"data": "motivo.name"},
             {"data": "id"},
         ],
+        columnDefs: [
 
+            {
+                targets: [-1],
+                class: 'text-center',
+                orderable: false,
+                render: function (data, type) {
+                    var buttons = '<a href="/medico/crearHis/" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a> ';
+                    return buttons;
+                }
+            },
+        ],
         initComplete: function (settings, json) {
 
         }
