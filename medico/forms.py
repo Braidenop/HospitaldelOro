@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import DateInput
-from citas.models import Usuario, Medico, Cita, Historiaclinica
+from citas.models import Usuario, Medico, Cita, Consulta
 
 
 class RegistroUsuarioForm(forms.ModelForm):
@@ -79,15 +79,15 @@ class FormularioLogin(AuthenticationForm):
         self.fields['password'].widget.attrs['placeholder'] = 'Contraseña'
 
 
-class HistoriaForm(forms.ModelForm):
+class ConsultaForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")
-        super(HistoriaForm, self).__init__(*args, **kwargs)
+        super(ConsultaForm, self).__init__(*args, **kwargs)
         self.fields['id_cita'].queryset = Cita.objects.select_related().filter(
-            esp_medic__id_medico__usuario=self.request.user)
+            esp_medic__id_medico__usuario=self.request.user, estado=False)
 
     class Meta:
-        model = Historiaclinica
+        model = Consulta
         fields = ['id_cita', 'diagnostico', 'examen', 'receta']
         widgets = {
             'diagnostico': forms.Textarea(attrs={'placeholder': 'Ingrese el Diagnóstico', }),

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.checks import messages
 from django.http import HttpResponseRedirect, request, JsonResponse
@@ -9,8 +11,8 @@ from django.contrib.auth import logout
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
 from reportes.forms import ReportForm
-from .forms import FormularioLogin
-from .models import Usuario, Paciente, Cita, Consulta, Especialidad_Medico
+from .forms import FormularioLogin, TestFormPac
+from .models import Usuario, Paciente, Cita, Consulta, Especialidad_Medico, Especialidad
 from .forms import RegistroUsuarioForm, RegistroPacienteForm
 from django.contrib.auth import views as auth_views
 from django.contrib import messages
@@ -138,7 +140,7 @@ class AgendaCita(LoginRequiredMixin, ListView):
                 end_date = request.POST.get('end_date', '')
                 search = Cita.objects.all()
                 if len(start_date) and len(end_date):
-                    search = search.filter(fecha_cita__range=[start_date, end_date],
+                    search = search.filter(esp_medic__fecha_cita__range=[start_date, end_date],
                                            paciente=self.request.user)
                 for s in search:
                     data.append(
@@ -157,6 +159,8 @@ class AgendaCita(LoginRequiredMixin, ListView):
         context['list_url'] = reverse_lazy('citas:lista_citas')
         context['entity'] = 'Listas'
         context['form'] = ReportForm()
+        actualcita = Consulta.objects.all().filter(id_cita__paciente=self.request.user, id_cita__esp_medic__fecha_cita=datetime.today())
+        context['actual'] = actualcita
         return context
 
 
@@ -164,7 +168,7 @@ class AgendaCita(LoginRequiredMixin, ListView):
 class CrearCita(LoginRequiredMixin, CreateView):
     model = Cita
     template_name = 'crearCita.html'
-    fields = ['esp_medic', 'fecha_cita', 'motivo']
+    fields = ['esp_medic', 'motivo']
     success_url = reverse_lazy('citas:lista_citas')
     url_redirect = success_url
 
@@ -182,6 +186,9 @@ class CrearCita(LoginRequiredMixin, CreateView):
         context['entity'] = 'Citas'
         context['list_url'] = self.success_url
         context['action'] = 'add'
+        context['especialidad'] = Especialidad.objects.all()
+        context['medico'] = Especialidad_Medico.objects.all()
+        context['horario'] = Especialidad_Medico.objects.all()
         return context
 
 
@@ -189,7 +196,7 @@ class CrearCita(LoginRequiredMixin, CreateView):
 class EditarCita(LoginRequiredMixin, UpdateView):
     model = Cita
     template_name = 'crearCita.html'
-    fields = ['esp_medic', 'fecha_cita', 'motivo']
+    fields = ['esp_medic', 'motivo']
     success_url = reverse_lazy('citas:lista_citas')
     url_redirect = success_url
 
@@ -237,3 +244,28 @@ class CalendarioCitas(LoginRequiredMixin, ListView):
 
 class LogoutView(auth_views.LogoutView):
     next_page = '/'
+
+
+class TestForm(CreateView):
+    model = Cita
+    template_name = 'test.html'
+    form_class = TestFormPac
+    success_url = reverse_lazy('citas:lista_citas')
+    url_redirect = success_url
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+
+    def get_context_data(self, **kwargs):
+        context = super(TestForm, self).get_context_data(**kwargs)
+        context['title'] = 'Prueba de Agendamiento'
+        context['entity'] = 'Citas'
+        context['action'] = 'test'
+        context['list_url'] = reverse_lazy('citas:lista_citas')
+        context['form'] = TestFormPac()
+        context['especialidad'] = Especialidad.objects.all()
+        context['medico'] = Especialidad_Medico.objects.all()
+        context['horario'] = Especialidad_Medico.objects.all()
+        return context

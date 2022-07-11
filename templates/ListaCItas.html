@@ -17,50 +17,57 @@
 
 {% block contentPa %}
     <!-- Listado Citas  -->
-    <div class="card card-primary">
-        <div class="card-header">
-            <h3 class="card-title">
-                <i class="fas fa-chart-bar"></i>
-                {{ title }}
-            </h3>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-4">
-                    <div class="form-group">
-                        <label>Rango de fechas:</label>
-                        {{ form.date_range}}
+    <div class="container-fluid ">
+    <div class="row">
+        <div class="col">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-chart-bar"></i>
+                         {{ title }}
+                     </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="form-group">
+                                <label>Rango de fechas:</label>
+                                {{ form.date_range}}
+                            </div>
+                        </div>
                     </div>
+                    <hr>
+                    <table class="table table-bordered" id="data">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Medico</th>
+                            <th scope="col">Especialidad</th>
+                            <th scope="col">Día de atención</th>
+                            <th scope="col">Hora</th>
+                            <th scope="col">Consultorio</th>
+                            <th scope="col">Motivo</th>
+                            <th scope="col">Opciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Opciones -->
+                <div class="card-footer">
+                        <a href="{{ create_url }}" class="btn btn-primary btn-flat btnTest">
+                            <i class="fas fa-plus"></i> Nuevo registro
+                        </a>
+                        <a href="{{ list_url }}" class="btn btn-success btn-flat">
+                            <i class="fas fa-sync"></i> Actualizar
+                        </a>
                 </div>
             </div>
-            <hr>
-            <table class="table table-bordered" id="data">
-                <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Medico</th>
-                    <th scope="col">Especialidad</th>
-                    <th scope="col">Día de atención</th>
-                    <th scope="col">Hora</th>
-                    <th scope="col">Consultorio</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Motivo</th>
-                    <th scope="col">Opciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
         </div>
-        <!-- Opciones -->
-        <div class="card-footer">
-                <a href="{{ create_url }}" class="btn btn-primary btn-flat btnTest">
-                    <i class="fas fa-plus"></i> Nuevo registro
-                </a>
-                <a href="{{ list_url }}" class="btn btn-success btn-flat">
-                    <i class="fas fa-sync"></i> Actualizar
-                </a>
-        </div>
+    </div>
+
+
     </div>
 {% endblock %}
 

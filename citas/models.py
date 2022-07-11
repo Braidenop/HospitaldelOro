@@ -1,6 +1,7 @@
 from datetime import datetime
 from crum import get_current_request
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
 from django.forms import model_to_dict
 from Intentocitas.settings import STATIC_URL, MEDIA_URL
 from django.db import models
@@ -86,6 +87,7 @@ class Medico(models.Model):
         (masc, 'Masculino'), (fem, 'Femenino')
     )
     genero = models.CharField(blank=False, max_length=50, choices=choices_genero)
+    esp = models.ManyToManyField(Especialidad, through='Especialidad_Medico')
 
     # Método para calcular la Edad
     def age(self):
@@ -113,7 +115,7 @@ class Medico(models.Model):
         item['direccion'] = self.direccion
         item['ciudad_resid'] = self.ciudad_red
         item['genero'] = {'id': self.genero, 'name': self.get_genero_display()}
-
+        item['esp'] = [{'id': e.id, 'name': e.nombre_esp} for e in self.esp.all()]
         return item
 
 
@@ -121,23 +123,6 @@ class Especialidad_Medico(models.Model):
     id_medico = models.ForeignKey(Medico, on_delete=models.CASCADE, verbose_name='Nombre del Medico')
     id_especialidad = models.ForeignKey(Especialidad, on_delete=models.CASCADE,
                                         verbose_name='Nombre de la Especialidad')
-
-    Lunes = 'Lunes'
-    Martes = 'Martes'
-    Miercoles = 'Miercoles'
-    Jueves = 'Jueves'
-    Viernes = 'Viernes'
-
-    Dias_Laborables = [
-        (Lunes, 'Lunes'),
-        (Martes, 'Martes'),
-        (Miercoles, 'Miercoles'),
-        (Jueves, 'Jueves'),
-        (Viernes, 'Viernes'),
-    ]
-
-    dia_laboral = models.CharField(max_length=20, choices=Dias_Laborables, help_text='Seleccione un dia',
-                                   verbose_name='Dia Laboral')
 
     horario_1 = '8:h00 - 8h30'
     horario_2 = '8h30 - 9h00'
@@ -199,17 +184,21 @@ class Especialidad_Medico(models.Model):
     consul = models.CharField(max_length=20, choices=consultorios, help_text='Seleccione un consultorio',
                               verbose_name='Consultorio')
 
+    fecha_cita = models.DateField(default=datetime.now)
+
+    dispo = models.BooleanField(default=False)
+
     def __str__(self):
-        return "%s %s %s %s %s " % (self.id_medico, self.id_especialidad, self.dia_laboral, self.horario, self.consul)
+        return "%s %s %s %s %s " % (self.id_medico, self.id_especialidad, self.horario, self.consul, self.fecha_cita)
 
     # Metodo para establecer restricciones del módelo e impedir que dos Medicos tengan datos repetidos.
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["id_medico", "id_especialidad", "dia_laboral", "horario"], name="med_esp_di_hh"
+                fields=["id_medico", "id_especialidad", "horario", "consul"], name="med_esp_di_hh"
             ),
             models.UniqueConstraint(
-                fields=["dia_laboral", "horario", "consul"], name="med_esp"
+                fields=["horario", "consul", "fecha_cita"], name="med_esp"
             ),
 
         ]
@@ -218,7 +207,7 @@ class Especialidad_Medico(models.Model):
         item = model_to_dict(self)
         item['id_medico'] = self.id_medico.toJSON()
         item['id_especialidad'] = self.id_especialidad.toJSON()
-        item['dia_laboral'] = {'id': self.dia_laboral, 'name': self.get_dia_laboral_display()}
+        item['dia_laboral'] = self.fecha_cita.strftime('%Y-%m-%d')
         item['horario'] = {'id': self.horario, 'name': self.get_horario_display()}
         item['consul'] = {'id': self.consul, 'name': self.get_consul_display()}
         return item
@@ -267,10 +256,17 @@ class Paciente(models.Model):
         return self.usuario.get_full_name(), self.telefono
 
 
+def crear_hist(sender, instance, created, **kwargs):
+    if created:
+        HistoriaClinica.objects.create(paciente=instance)
+
+
+post_save.connect(crear_hist, sender=Paciente)
+
+
 class Cita(models.Model):
     paciente = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     esp_medic = models.ForeignKey(Especialidad_Medico, on_delete=models.CASCADE, verbose_name='Disponibilidad')
-    fecha_cita = models.DateField(default=datetime.now)
 
     Consulta = 'Consulta'
     RevisionExamenes = 'Revisión de Exámenes'
@@ -284,14 +280,15 @@ class Cita(models.Model):
 
     motivo = models.CharField(max_length=20, verbose_name='Motivo de cita', choices=motivo_choices)
 
+    estado = models.BooleanField(default=False)
+
     def __str__(self):
-        return "%s %s %s %s" % (self.paciente, self.esp_medic, self.fecha_cita, self.motivo)
+        return "%s %s %s" % (self.paciente, self.esp_medic, self.motivo)
 
     def toJSON(self):
         item = model_to_dict(self)
         item['paciente'] = self.paciente.toJSON()
         item['esp_medic'] = self.esp_medic.toJSON()
-        item['fecha_cita'] = self.fecha_cita.strftime('%Y-%m-%d')
         item['motivo'] = {'id': self.motivo, 'name': self.get_motivo_display()}
 
         return item
@@ -299,7 +296,16 @@ class Cita(models.Model):
     class Meta:
         verbose_name = 'Cita'
         verbose_name_plural = 'Citas'
-        unique_together = ['esp_medic', 'fecha_cita']
+        unique_together = ['paciente', 'esp_medic']
+
+
+def dispo(sender, instance, **kwargs):
+    esp_medic = instance.esp_medic
+    esp_medic.dispo = True
+    esp_medic.save()
+
+
+post_save.connect(dispo, sender=Cita)
 
 
 class Medicamento(models.Model):
@@ -324,28 +330,13 @@ class Medicamento(models.Model):
         return item
 
 
-class Consulta(models.Model):
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    medico = models.ForeignKey(Medico, on_delete=models.CASCADE)
-
-    diagnostico = models.TextField(blank=False)
-    fecha = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return '%s - %s' % (self.paciente, self.medico)
-
-    class Meta:
-        verbose_name = 'Consulta'
-        verbose_name_plural = 'Consultas'
-
-
 class Receta(models.Model):
     medicamento = models.ForeignKey(Medicamento, on_delete=models.CASCADE, verbose_name='Medicamento')
     descripcion = models.CharField(max_length=200, blank=False, verbose_name='Indicación')
 
     class Meta:
-        verbose_name = 'Tratamiento'
-        verbose_name_plural = 'Tratamientos'
+        verbose_name = 'Receta'
+        verbose_name_plural = 'Recetas'
 
     def __str__(self):
         return '%s %s' % (self.medicamento, self.descripcion)
@@ -355,17 +346,6 @@ class Receta(models.Model):
         item['medicamento'] = self.medicamento.toJSON()
         item['descripcion'] = self.descripcion
         return item
-
-
-class Consultorio(models.Model):
-    nombre = models.CharField(blank=False, max_length=50)
-    direccion = models.TextField(blank=False)
-    mision = models.TextField(blank=False)
-    vision = models.TextField(blank=False)
-    eslogan = models.CharField(blank=False, max_length=150)
-    telefono = models.CharField(blank=False, max_length=50)
-    correo = models.EmailField(blank=False)
-    foto = models.ImageField(upload_to='home')
 
 
 class Examen(models.Model):
@@ -382,7 +362,7 @@ class Examen(models.Model):
         return item
 
 
-class Historiaclinica(models.Model):
+class Consulta(models.Model):
     id_cita = models.ForeignKey(Cita, on_delete=models.CASCADE, verbose_name='Cita')
     diagnostico = models.TextField(verbose_name='Diagnóstico')
     examen = models.ManyToManyField(Examen)
@@ -402,3 +382,21 @@ class Historiaclinica(models.Model):
         return ', '.join([receta.medicamento.descripcion for receta in self.receta.all()])
 
     display_rece.short_description = 'Receta'
+
+
+def estCita(sender, instance, **kwargs):
+    id_cita = instance.id_cita
+    id_cita.estado = True
+    id_cita.save()
+
+
+post_save.connect(estCita, sender=Consulta)
+
+
+class HistoriaClinica(models.Model):
+    paciente = models.OneToOneField(Paciente, on_delete=models.CASCADE, verbose_name='historia_pac')
+
+
+class HistPac(models.Model):
+    hist = models.ForeignKey(HistoriaClinica, on_delete=models.CASCADE)
+    consul = models.ForeignKey(Consulta, on_delete=models.CASCADE)

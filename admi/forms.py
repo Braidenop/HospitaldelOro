@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import DateTimeInput, DateInput, SelectMultiple, PasswordInput, TextInput, ModelForm, EmailInput
-from citas.models import Usuario, Especialidad, Medico, Especialidad_Medico, Cita, Examen, Medicamento, Receta, Paciente
+from citas.models import Usuario, Especialidad, Medico, Especialidad_Medico, Cita, Examen, Medicamento, Receta, \
+    Paciente, Consulta
 from django.contrib.auth.forms import UserCreationForm
 
 
@@ -151,7 +152,7 @@ class MedicoForm(forms.ModelForm):
             'genero': forms.Select(attrs={'class': 'browser-default'}),
             'telefono': forms.TextInput(),
             'ciudad_red': forms.TextInput(),
-
+            'esp': forms.SelectMultiple(),
         }
 
 
@@ -175,26 +176,29 @@ class PacienteForm(forms.ModelForm):
 class DisponibilidadForm(forms.ModelForm):
     class Meta:
         model = Especialidad_Medico
-        fields = ['id_medico', 'id_especialidad', 'dia_laboral', 'horario', 'consul']
+        fields = ['id_medico', 'id_especialidad', 'fecha_cita', 'horario', 'consul']
         widgets = {
             'id_medico': forms.Select(attrs={'class': 'browser-default'}),
             'id_especialidad': forms.Select(attrs={'class': 'browser-default'}),
-            'dia_laboral': forms.Select(attrs={'class': 'browser-default'}),
             'horario': forms.Select(attrs={'class': 'browser-default'}),
             'consul': forms.Select(attrs={'class': 'browser-default'}),
-
+            'fecha_cita': DateImput(attrs={'class': 'form-control'}),
         }
 
 
 # Formulario para crear Cita
 class CitaForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CitaForm, self).__init__(*args, **kwargs)
+        self.fields['paciente'].queryset = Usuario.objects.filter(groups__name='Paciente')
+        self.fields['esp_medic'].queryset = Especialidad_Medico.objects.filter(dispo=False)
+
     class Meta:
         model = Cita
-        fields = ['paciente', 'esp_medic', 'fecha_cita', 'motivo']
+        fields = ['paciente', 'esp_medic', 'motivo']
         widgets = {
-            'paciente': forms.Select(attrs={'class': 'browser-default'}),
+            'paciente': forms.Select(attrs={'class': 'form-control select2'}),
             'esp_medic': forms.Select(attrs={'class': 'browser-default'}),
-            'fecha_cita': DateImput(attrs={'class': 'form-control'}),
             'motivo': forms.Select(attrs={'class': 'browser-default'}),
         }
 

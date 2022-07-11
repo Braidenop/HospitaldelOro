@@ -43,6 +43,9 @@
     <link rel="stylesheet" href="{% static 'lib/daterangepicker-master/daterangepicker.css' %}"/>
     <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/plugins/buttons-1.6.1/css/buttons.bootstrap.min.css' %}"/>
 
+    <link href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}" rel="stylesheet"/>
+
 </head>
 <body>
 {% block content %}
@@ -68,6 +71,79 @@
     <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
     <script src="{% static 'lib/dentcare/js/main.js' %}"></script>
+    <script src="{% static 'js/jquery.chained.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+    <script>
+        {#$(function () {#}
+        {#    $('select[name="esp"]').on('change', function () {#}
+        {#        var id = $(this).val();#}
+        {#        var select_esp =  $('select[name="med"]');#}
+        {#        var options = '<option value="">__________________________ </option>';#}
+        {#        $.ajax({#}
+        {#                url: window.location.pathname,#}
+        {#                type: 'POST',#}
+        {#                data: {#}
+        {#                    'action': 'search_esp',#}
+        {#                    'id': id#}
+        {#                },#}
+        {#                dataType: 'json',#}
+        {#        }).done(function (data) {#}
+        {##}
+        {#                if (!data.hasOwnProperty('error')) {#}
+        {#                    $.each(data,function (key, value) {#}
+        {#                        options += '<option value="'+value.id+'">'+value.name+'</option>';#}
+        {#                    })#}
+        {#                    return false;#}
+        {#                }#}
+        {#                message_error(data.error);#}
+        {#        }).fail(function (jqXHR, textStatus, errorThrown) {#}
+        {#                alert(textStatus + ': ' + errorThrown);#}
+        {#        }).always(function (data) {#}
+        {#            select_esp.html(options);#}
+        {#        });#}
+        {#    });#}
+        {#    $('select[name="med"]').on('change', function () {#}
+        {#        var id = $(this).val();#}
+        {#        var select_med =  $('select[name="esp_medic"]');#}
+        {#        var options = '<option value="">__________________________ </option>';#}
+        {#        $.ajax({#}
+        {#                url: window.location.pathname,#}
+        {#                type: 'POST',#}
+        {#                data: {#}
+        {#                    'action': 'search_med',#}
+        {#                    'id': id#}
+        {#                },#}
+        {#                dataType: 'json',#}
+        {#        }).done(function (data) {#}
+        {##}
+        {#                if (!data.hasOwnProperty('error')) {#}
+        {#                    $.each(data,function (key, value) {#}
+        {#                        options += '<option value="'+value.id+'">'+value.name+'</option>';#}
+        {#                    })#}
+        {#                    return false;#}
+        {#                }#}
+        {#                message_error(data.error);#}
+        {#        }).fail(function (jqXHR, textStatus, errorThrown) {#}
+        {#                alert(textStatus + ': ' + errorThrown);#}
+        {#        }).always(function (data) {#}
+        {#            select_med.html(options);#}
+        {#        });#}
+        {#    });#}
+        {##}
+
+        $('.select2').select2({
+                theme: "bootstrap4",
+                language: 'es',
+                delay: '500'
+            });
+
+
+            $("#id_esp_med").chained("#id_especialidad");
+
+
+
+    </script>
 <!-- Bloque para aumentar librerias  -->
     {% block head_pac %}
 

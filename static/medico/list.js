@@ -23,9 +23,22 @@ $(function () {
             {"data": "direccion"},
             {"data": "ciudad_resid"},
             {"data": "genero.name"},
+            {"data": "esp"},
             {"data": "id"},
         ],
         columnDefs: [
+            {
+                targets: [-2],
+                class: 'text-center',
+                orderable: false,
+                render: function (data, type, row) {
+                    var html = '';
+                    $.each(row.esp, function (key, value) {
+                        html += '<span class="badge badge-success">' + value.name + '</span> ';
+                    });
+                    return html;
+                }
+            },
 
             {
                 targets: [-1],

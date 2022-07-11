@@ -2,14 +2,14 @@ from django.forms import *
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms import DateInput
 
-from .models import Usuario, Paciente, Cita
+from .models import Usuario, Paciente, Cita, Especialidad, Medico, Especialidad_Medico
 
 
 class LoginForm(Form):
     username = CharField(max_length=30,
-                               widget=TextInput(attrs={'required': 'True'}))
+                         widget=TextInput(attrs={'required': 'True'}))
     password = CharField(max_length=30,
-                               widget=TextInput(attrs={'type': 'password', 'required': 'True'}))
+                         widget=TextInput(attrs={'type': 'password', 'required': 'True'}))
 
 
 class RegistroUsuarioForm(ModelForm):
@@ -88,28 +88,17 @@ class RegistroPacienteForm(ModelForm):
 
 
 class AgendaCitaForm(ModelForm):
-    # def __init__(self, *args, **kwargs):
-    #     user = kwargs.pop('user')
-    #     self.paciente = user
-    #     super(AgendaCitaForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = Cita
-        fields = ['esp_medic', 'fecha_cita', 'motivo']
+        fields = ['esp_medic', 'motivo']
         widgets = {
             'esp_medic': Select(attrs={
                 'class ': 'form-control select2',
             }
             ),
-            'fecha_cita': DateInput(),
             'motivo': Select(),
-
         }
-
-    # def save(self, *args, **kwargs):
-    #     self.instance.paciente = self.paciente
-    #     cita = super(AgendaCitaForm, self).save(*args,**kwargs)
-    #     return cita
 
 
 class FormularioLogin(AuthenticationForm):
@@ -119,3 +108,27 @@ class FormularioLogin(AuthenticationForm):
         self.fields['username'].widget.attrs['placeholder'] = 'Nombre de Usuario'
         self.fields['password'].widget.attrs['class'] = 'form-control'
         self.fields['password'].widget.attrs['placeholder'] = 'Contraseña'
+
+
+class TestFormPac(ModelForm):
+    # esp = ModelChoiceField(queryset=Especialidad.objects.all(), widget=Select(attrs={
+    #     'class': 'form-control'
+    # }))
+    #
+    # med = ModelChoiceField(queryset=Especialidad_Medico.objects.none(), widget=Select(attrs={
+    #     'class': 'form-control'
+    # }))
+    #
+    # esp_medic = ModelChoiceField(queryset=Especialidad_Medico.objects.none(), widget=Select(attrs={
+    #     'class': 'form-control'
+    # }))
+
+    class Meta:
+        model = Cita
+        # exclude = ['esp', 'med']
+        fields = ['paciente', 'esp_medic', 'motivo']
+        widgets = {
+            'paciente': Select(attrs={'class': 'browser-default'}),
+            'motivo': Select(),
+
+        }

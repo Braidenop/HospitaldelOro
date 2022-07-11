@@ -40,7 +40,7 @@
                         {% if request.user.is_active %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'medico:citas' %}">Citas Planificadas</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'medico:perfil_medico' %}">Perfil</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'medico:lista_hist' %}">Consultas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'medico:lista_consul' %}">Consultas</a></li>
                         <li class="nav-item"><a class="nav-link" href="#services" style="color: blanchedalmond;">Bienvenido {{ request.user.username }}</a></li>
                         <li class="nav-item"><a class="nav-link btn btn-danger mt-1 mx-1" href="{% url "medico:logout_medico" %}">Salir</a></li>
                         {% else %}

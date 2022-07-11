@@ -1,0 +1,57 @@
+{% extends 'medico/listMedi.html' %}
+
+{% block colums %}
+        <tr>
+            <th>ID</th>
+            <th>Nombre del Paciente</th>
+            <th>Especialidad</th>
+            <th>Fecha de Atención</th>
+            <th>Horario</th>
+            <th>Consultorio</th>
+            <th>Exámenes</th>
+            <th>Receta</th>
+            <th>Opciones</th>
+
+        </tr>
+{% endblock %}
+
+    {% block rows %}
+        {% for hist in object_list %}
+    <tr>
+        <td>{{ hist.id }}</td>
+        <td>{{ hist.id_cita.paciente}}</td>
+        <td>{{ hist.id_cita.esp_medic.id_especialidad.nombre_esp}}</td>
+        <td>{{ hist.id_cita.esp_medic.fecha_cita}}</td>
+        <td>{{ hist.id_cita.esp_medic.horario}}</td>
+        <td>{{ hist.id_cita.esp_medic.consul}}</td>
+
+        <td>
+        {% for examen in hist.examen.all %}
+            <span class="badge badge-secondary"> {{ examen.nombre }}</span>
+        {% endfor %}
+        </td>
+
+        <td>{% for receta in hist.receta.all %}
+            <table>
+                <tbody>
+                        <tr>
+                            <td>{{ receta.medicamento.nombre }}</td>
+                            <td>{{ receta.medicamento.presentacion }}</td>
+                            <td>{{ receta.medicamento.volumen }}</td>
+                            <td>{{ receta.descripcion }}</td>
+                       </tr>
+                </tbody>
+            </table>
+
+            {% endfor %}
+        </td>
+        <td>
+        <a href="{% url 'medico:editar_consul' hist.id %}" class="btn btn-warning btn-xs btn-flat"><i class="fas fa-edit"></i></a>
+        <a href="{% url 'medico:eliminar_consul' hist.id %}" type="button" class="btn btn-danger btn-xs btn-flat"><i class="fas fa-trash-alt"></i></a>
+        <a href="{% url 'medico:receta_pdf' hist.id %}"  target="_blank" type="button" class="btn btn-info btn-xs btn-flat"><i class="fas fa-file-pdf"></i></a>
+
+        </td>
+
+    </tr>
+        {% endfor %}
+    {% endblock %}

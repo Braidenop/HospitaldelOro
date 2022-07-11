@@ -6,8 +6,8 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, ListView, UpdateView, DeleteView
-from medico.forms import RegistroMedicoForm, RegistroUsuarioForm, HistoriaForm
-from citas.models import Usuario, Medico, Cita, Especialidad_Medico, Historiaclinica, Especialidad
+from medico.forms import RegistroMedicoForm, RegistroUsuarioForm, ConsultaForm
+from citas.models import Usuario, Medico, Cita, Especialidad_Medico, Consulta, Especialidad
 from django.contrib.auth import views as auth_views
 from Intentocitas.mixins import PermisosMedicos
 from django.http import HttpResponse
@@ -94,7 +94,7 @@ class ListaCita(LoginRequiredMixin, PermisosMedicos, ListView):
                 end_date = request.POST.get('end_date', '')
                 search = Cita.objects.all()
                 if len(start_date) and len(end_date):
-                    search = search.filter(fecha_cita__range=[start_date, end_date],
+                    search = search.filter(esp_medic__fecha_cita__range=[start_date, end_date],
                                            esp_medic__id_medico__usuario=self.request.user)
                 for s in search:
                     data.append(
@@ -116,72 +116,72 @@ class ListaCita(LoginRequiredMixin, PermisosMedicos, ListView):
 
 #  Lista de Consultas
 
-class HistoriaList(LoginRequiredMixin, PermisosMedicos, ListView):
-    model = Historiaclinica
-    template_name = 'medico/listhistoriaclinica.html'
-    permission_required = 'view_historiaclinica'
+class ConsultaList(LoginRequiredMixin, PermisosMedicos, ListView):
+    model = Consulta
+    template_name = 'medico/listconsul.html'
+    permission_required = 'view_consulta'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Consultas'
-        context['create_url'] = reverse_lazy('medico:crear_hist')
-        context['list_url'] = reverse_lazy('medico:lista_hist')
+        context['create_url'] = reverse_lazy('medico:crear_consul')
+        context['list_url'] = reverse_lazy('medico:lista_consul')
         context['entity'] = 'Listas'
         return context
 
 
 # Crear una Consulta
 
-def hist_crear(request):
+def consul_crear(request):
     if request.method == "POST":
-        form = HistoriaForm(request.POST, request=request)
+        form = ConsultaForm(request.POST, request=request)
         if form.is_valid():
             form.save()
-            return redirect('medico:lista_hist')
+            return redirect('medico:lista_consul')
     else:
-        form = HistoriaForm(request=request)
-    return render(request, 'medico/crear_historia.html', {'form': form,
+        form = ConsultaForm(request=request)
+    return render(request, 'medico/crear_consulta.html', {'form': form,
                                                           'title': 'Creación de Consulta',
-                                                          'list_url': reverse_lazy('medico:lista_hist'), })
+                                                          'list_url': reverse_lazy('medico:lista_consul'), })
 
 
 # Editar una Consulta
-class EditarHist(LoginRequiredMixin, PermisosMedicos, UpdateView):
-    model = Historiaclinica
-    template_name = 'medico/crear_historia.html'
+class EditarConsul(LoginRequiredMixin, PermisosMedicos, UpdateView):
+    model = Consulta
+    template_name = 'medico/crear_consulta.html'
     fields = ['id_cita', 'diagnostico', 'examen', 'receta']
-    success_url = reverse_lazy('medico:lista_hist')
+    success_url = reverse_lazy('medico:lista_consul')
     url_redirect = success_url
-    permission_required = 'change_historiaclinica'
+    permission_required = 'change_consulta'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(EditarHist, self).get_context_data(**kwargs)
+        context = super(EditarConsul, self).get_context_data(**kwargs)
         context['title'] = 'Edición de Historia Clinica'
-        context['list_url'] = reverse_lazy('medico:lista_hist')
+        context['list_url'] = reverse_lazy('medico:lista_consul')
         context['action'] = 'edit'
         return context
 
 
 # Eliminar una consulta
-class EliminarHist(LoginRequiredMixin, PermisosMedicos, DeleteView):
-    model = Historiaclinica
-    template_name = 'medico/deletehist.html'
-    success_url = reverse_lazy('medico:lista_hist')
+class EliminarConsul(LoginRequiredMixin, PermisosMedicos, DeleteView):
+    model = Consulta
+    template_name = 'medico/deleteconsul.html'
+    success_url = reverse_lazy('medico:lista_consul')
     url_redirect = success_url
-    permission_required = 'delete_historiaclinica'
+    permission_required = 'delete_consulta'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        context = super(EliminarHist, self).get_context_data(**kwargs)
-        context['title'] = 'Eliminación de Historia Clínica'
-        context['list_url'] = reverse_lazy('medico:lista_hist')
+        context = super(EliminarConsul, self).get_context_data(**kwargs)
+        context['title'] = 'Eliminación de Consulta'
+        context['list_url'] = reverse_lazy('medico:lista_consul')
         context['action'] = 'delete'
         return context
 
@@ -192,7 +192,7 @@ class RecetaPDF(LoginRequiredMixin, PermisosMedicos, View):
         try:
             template = get_template('medico/receta_pdf.html')
             context = {
-                'hist': Historiaclinica.objects.get(pk=self.kwargs['pk']),
+                'hist': Consulta.objects.get(pk=self.kwargs['pk']),
                 'comp': {'name': 'Hospital Básico del Oro', 'ruc': '0999999999998', 'address': 'El Oro'}
             }
             html = template.render(context)
@@ -205,4 +205,4 @@ class RecetaPDF(LoginRequiredMixin, PermisosMedicos, View):
             return response
         except:
             pass
-        return HttpResponseRedirect(reverse_lazy('medico:lista_hist'))
+        return HttpResponseRedirect(reverse_lazy('medico:lista_consul'))

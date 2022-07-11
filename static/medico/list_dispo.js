@@ -16,7 +16,7 @@ $(function () {
             {"data": "id"},
             {"data": "id_medico.usuario.full_name"},
             {"data": "id_especialidad.nombre_esp"},
-            {"data": "dia_laboral.name"},
+            {"data": "dia_laboral"},
             {"data": "horario.name"},
             {"data": "consul.name"},
             {"data": "id"},

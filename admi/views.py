@@ -10,7 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 from citas.forms import RegistroUsuarioForm, RegistroPacienteForm
-from citas.models import Usuario, Especialidad, Medico, Especialidad_Medico, Cita, Examen, Receta, Medicamento, Paciente
+from citas.models import Usuario, Especialidad, Medico, Especialidad_Medico, Cita, Examen, Receta, Medicamento, Paciente, Consulta
 from medico.forms import RegistroMedicoForm
 from reportes.forms import ReportForm
 from .forms import CrearUsuarioForm, EspecialidadForm, MedicoForm, DisponibilidadForm, CitaForm, \
@@ -27,7 +27,7 @@ class homeAdmin(LoginRequiredMixin, PermisosGrupos, TemplateView):
         try:
             year = datetime.now().year
             for m in range(1, 13):
-                total = Cita.objects.filter(fecha_cita__year=year, fecha_cita__month=m).count()
+                total = Cita.objects.filter(esp_medic__fecha_cita__year=year, esp_medic__fecha_cita__month=m).count()
                 data.append((total))
         except:
             pass
@@ -976,7 +976,7 @@ class ReporteCita(LoginRequiredMixin, PermisosGrupos, ListView):
                 end_date = request.POST['end_date']
                 search = Cita.objects.all()
                 if len(start_date) and len(end_date):
-                    search = search.filter(fecha_cita__range=[start_date, end_date])
+                    search = search.filter(esp_medic__fecha_cita__range=[start_date, end_date])
                 for i in search:
                     data.append(i.toJSON())
             else:
