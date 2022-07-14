@@ -40,7 +40,7 @@ class Reportes(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Reporte de Ventas'
+        context['title'] = 'Reporte de Citas'
         context['entity'] = 'Reportes'
         context['list_url'] = reverse_lazy('reportes:report_cita')
         context['form'] = ReportForm()

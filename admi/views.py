@@ -10,7 +10,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 from citas.forms import RegistroUsuarioForm, RegistroPacienteForm
-from citas.models import Usuario, Especialidad, Medico, Especialidad_Medico, Cita, Examen, Receta, Medicamento, Paciente, Consulta
+from citas.models import Usuario, Especialidad, Medico, Especialidad_Medico, Cita, Examen, Receta, Medicamento, \
+    Paciente, Consulta
 from medico.forms import RegistroMedicoForm
 from reportes.forms import ReportForm
 from .forms import CrearUsuarioForm, EspecialidadForm, MedicoForm, DisponibilidadForm, CitaForm, \
@@ -33,10 +34,67 @@ class homeAdmin(LoginRequiredMixin, PermisosGrupos, TemplateView):
             pass
         return data
 
+
+    def total_consul_inf(self):
+        tot_consul = Consulta.objects.all().count()
+        tot_enf_inf = Consulta.objects.filter(tipo_enf='Infecciosa o Parasitaria').count()
+        porc_enf_inf = int((tot_enf_inf * 100) / tot_consul)
+        return porc_enf_inf
+
+    def total_consul_endo(self):
+        tot_consul = Consulta.objects.all().count()
+        tot_enf_end = Consulta.objects.filter(tipo_enf='Endocrina').count()
+        porc_enf_end = int((tot_enf_end * 100) / tot_consul)
+        return porc_enf_end
+
+    def total_consul_resp(self):
+        tot_consul = Consulta.objects.all().count()
+        tot_enf_resp = Consulta.objects.filter(tipo_enf='Respiratoria').count()
+        porc_enf_resp = int((tot_enf_resp * 100) / tot_consul)
+        return porc_enf_resp
+
+    def total_consul_neu(self):
+        tot_consul = Consulta.objects.all().count()
+        tot_enf_neu = Consulta.objects.filter(tipo_enf='Neuronal').count()
+        porc_enf_neu = int((tot_enf_neu * 100) / tot_consul)
+        return porc_enf_neu
+
+
+    def total_consul_gas(self):
+        tot_consul = Consulta.objects.all().count()
+        tot_enf_gas = Consulta.objects.filter(tipo_enf='Gastrica').count()
+        porc_enf_gas = int((tot_enf_gas * 100) / tot_consul)
+        return porc_enf_gas
+
+    def count_medico(self):
+        data = []
+        try:
+            espe = Especialidad.objects.values_list('nombre_esp', flat=True)
+
+            for m in espe:
+                med = Medico.objects.filter(esp__nombre_esp=m).distinct().count()
+                data.append((med))
+        except:
+            pass
+        return data
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['panel'] = 'Panel de administrador'
         context['graph_sales_year_month'] = self.get_graph_sales_year_month()
+        context['count_medico'] = self.count_medico()
+        esp = Especialidad.objects.all()
+        context['esp'] = esp
+        context['pac'] = Paciente.objects.count()
+        context['med'] = Medico.objects.count()
+        context['espci'] = Especialidad.objects.count()
+        context['consul'] = Consulta.objects.filter(tipo_enf='Respiratoria')
+        context['tot_enf_inf'] = self.total_consul_inf()
+        context['tot_enf_endo'] = self.total_consul_endo()
+        context['tot_enf_resp'] = self.total_consul_resp()
+        context['tot_enf_gas'] = self.total_consul_gas()
+        context['tot_enf_neu'] = self.total_consul_neu()
+
         return context
 
 
@@ -169,15 +227,9 @@ class listPacientes(LoginRequiredMixin, PermisosGrupos, ListView):
         return context
 
 
-class crearPaciente(LoginRequiredMixin, PermisosGrupos, CreateView):
-    models = Paciente, Usuario
-    form_class = RegistroUsuarioForm
-    form_class_2 = RegistroPacienteForm
+class crearPaciente(LoginRequiredMixin, PermisosGrupos, TemplateView):
     template_name = 'admi/paciente/crear_paciente.html'
     permission_required = 'add_paciente'
-
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(crearPaciente, self).get_context_data(**kwargs)
@@ -190,8 +242,8 @@ class crearPaciente(LoginRequiredMixin, PermisosGrupos, CreateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        usuario = self.form_class(request.POST, request.FILES)
-        paciente = self.form_class_2(request.POST)
+        usuario = RegistroUsuarioForm(request.POST, request.FILES)
+        paciente = RegistroPacienteForm(request.POST)
         if usuario.is_valid() and paciente.is_valid():
             Usuario.objects.create_user(username=usuario.cleaned_data['username'],
                                         email=usuario.cleaned_data['email'],
@@ -387,15 +439,9 @@ class listMedi(LoginRequiredMixin, PermisosGrupos, ListView):
         return context
 
 
-class crearMedi(LoginRequiredMixin, PermisosGrupos, CreateView):
-    models = Medico, Usuario
-    form_class = RegistroUsuarioForm
-    form_class_2 = RegistroMedicoForm
+class crearMedi(LoginRequiredMixin, PermisosGrupos, TemplateView):
     template_name = 'admi/medico/crear_medico.html'
     permission_required = 'add_medico'
-
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(crearMedi, self).get_context_data(**kwargs)
@@ -408,8 +454,8 @@ class crearMedi(LoginRequiredMixin, PermisosGrupos, CreateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        usuario = self.form_class(request.POST, request.FILES)
-        medico = self.form_class_2(request.POST)
+        usuario = RegistroUsuarioForm(request.POST, request.FILES)
+        medico = RegistroMedicoForm(request.POST)
         if usuario.is_valid() and medico.is_valid():
             Usuario.objects.create_user(username=usuario.cleaned_data['username'],
                                         email=usuario.cleaned_data['email'],

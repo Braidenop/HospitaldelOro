@@ -115,7 +115,7 @@ class Medico(models.Model):
         item['direccion'] = self.direccion
         item['ciudad_resid'] = self.ciudad_red
         item['genero'] = {'id': self.genero, 'name': self.get_genero_display()}
-        item['esp'] = [{'id': e.id, 'name': e.nombre_esp} for e in self.esp.all()]
+        item['esp'] = [{'id': e.id, 'name': e.nombre_esp} for e in self.esp.all().distinct()]
         return item
 
 
@@ -367,6 +367,24 @@ class Consulta(models.Model):
     diagnostico = models.TextField(verbose_name='Diagnóstico')
     examen = models.ManyToManyField(Examen)
     receta = models.ManyToManyField(Receta)
+
+    infec = 'Infecciosa o Parasitaria'
+    endo = 'Endocrina'
+    resp = 'Respiratoria'
+    gas = 'Gastrica'
+    neu = 'Neuronal'
+    Otro = 'Otro'
+
+    enfer_choices = [
+        (infec, 'Infecciosa o Parasitaria'),
+        (endo, 'Endocrina'),
+        (resp, 'Respiratoria'),
+        (gas, 'Gastrica'),
+        (neu, 'Neuronal'),
+        (Otro, 'Otro'),
+    ]
+
+    tipo_enf = models.CharField(max_length=100, choices=enfer_choices, verbose_name='Tipo de Enfermedad', blank=False)
 
     def __str__(self):
         return '%s %s %s' % (self.id_cita, self.examen, self.receta)

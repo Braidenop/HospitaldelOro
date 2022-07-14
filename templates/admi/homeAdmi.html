@@ -2,15 +2,81 @@
 {% load static %}
 {% load widget_tweaks %}
 {% block head %}
+
     <script src="{% static 'lib/highcharts-8.1.2/highcharts.js' %}"></script>
     <script src="{% static 'lib/highcharts-8.1.2/modules/exporting.js' %}"></script>
     <script src="{% static 'lib/highcharts-8.1.2/modules/export-data.js' %}"></script>
-    <script src="{% static 'lib/highcharts-8.1.2/modules/accessibility.js' %}"></script
+    <script src="{% static 'lib/highcharts-8.1.2/modules/accessibility.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}"/>
+    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}"/>
+    <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/buttons-1.6.1/js/dataTables.buttons.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/jszip-2.5.0/jszip.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/pdfmake-0.1.36/pdfmake.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/pdfmake-0.1.36/vfs_fonts.js' %}" type="text/javascript"></script>
+    <script src="{% static 'lib/datatables-1.10.20/plugins/buttons-1.6.1/js/buttons.html5.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/admi_consul.js' %}"></script>
 {% endblock %}
 
 
 {% block content %}
+
     <div class="container-fluid">
+        <div class="row">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Número de Pacientes</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pac }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fa fa-users fa-2x "></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Número de Médicos</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ med }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user-md  fa-2x "></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Especialidades</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ espci }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-heartbeat fa-2x "></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-lg-12">
                 <div id="container"></div>
@@ -29,7 +95,95 @@
             </div>
         </div>
         <br>
+        <div class="row">
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Cantidad de Medicos por Especialidad</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-pie pt-4 pb-2">
+                            <canvas id="myPieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 mb-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Enfermedades</h6>
+                </div>
+                <div class="card-body">
+                    <h4 class="small font-weight-bold">Infecciosas o Parasitarias<span
+                            class="float-right">{{ tot_enf_inf }}%</span></h4>
+                    <div class="progress mb-4">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ tot_enf_inf }}%"
+                             aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <h4 class="small font-weight-bold">Endocrinas <span
+                            class="float-right">{{ tot_enf_endo }}%</span></h4>
+                    <div class="progress mb-4">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ tot_enf_endo }}%"
+                             aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <h4 class="small font-weight-bold">Respiratorias<span
+                            class="float-right">{{ tot_enf_resp }}%</span></h4>
+                    <div class="progress mb-4">
+                        <div class="progress-bar" role="progressbar" style="width: {{ tot_enf_resp }}%"
+                             aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <h4 class="small font-weight-bold">Gastricas <span
+                            class="float-right">{{ tot_enf_gas }}%</span></h4>
+                    <div class="progress mb-4">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: {{ tot_enf_gas }}%"
+                             aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <h4 class="small font-weight-bold">Neuronales <span
+                            class="float-right">{{ tot_enf_neu }}%</span></h4>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ tot_enf_neu }}%"
+                             aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Registro de Enfermedades Respiratorias</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0" style="height: 700px;">
+                <table class="table table-head-fixed text-nowrap" id="data">
+                  <thead>
+                    <tr>
+                         <th>ID - Cita</th>
+                         <th>Nombre Paciente</th>
+                         <th>Medico Encargado</th>
+                         <th>Síntomas</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                      {% for x in consul %}
+                          <tr>
+                            <td> {{ x.id_cita.id }} </td>
+                            <td> {{ x.id_cita.paciente}} </td>
+                            <td> {{ x.id_cita.esp_medic.id_medico}} </td>
+                            <td> {{ x.diagnostico }} </td>
+                          </tr>
+                      {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
     </div>
+
     <script type="application/javascript">
         Highcharts.chart('container', {
             chart: {
@@ -87,6 +241,49 @@
             }]
         });
     </script>
+
+    <script>
+
+    // Pie Chart Example
+        var ctx = document.getElementById("myPieChart");
+        var myPieChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+
+            labels: [
+                {% for x in esp %}
+                "{{ x.nombre_esp }}",
+                {% endfor %}
+            ],
+
+            datasets: [{
+              data: {{ count_medico }},
+              backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc', '#38CC36', '#DA3A52', '#E5D336', '#ADEE59'],
+              hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+              hoverBorderColor: "rgba(234, 236, 244, 1)",
+            }],
+          },
+          options: {
+            maintainAspectRatio: false,
+            tooltips: {
+              backgroundColor: "rgb(255,255,255)",
+              bodyFontColor: "#000000",
+              bodyFontSize: 15,
+              borderColor: '#dddfeb',
+              borderWidth: 1,
+              xPadding: 20,
+              yPadding: 15,
+              displayColors: false,
+              caretPadding: 10,
+            },
+            legend: {
+              display: false
+            },
+            cutoutPercentage: 70,
+          },
+        });
+    </script>
+
 
 {% endblock %}
 

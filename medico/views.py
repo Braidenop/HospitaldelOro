@@ -121,6 +121,10 @@ class ConsultaList(LoginRequiredMixin, PermisosMedicos, ListView):
     template_name = 'medico/listconsul.html'
     permission_required = 'view_consulta'
 
+    def get_queryset(self):
+        queryset = Consulta.objects.select_related().filter(id_cita__esp_medic__id_medico__usuario=self.request.user)
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Consultas'

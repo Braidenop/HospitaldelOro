@@ -88,7 +88,7 @@ class ConsultaForm(forms.ModelForm):
 
     class Meta:
         model = Consulta
-        fields = ['id_cita', 'diagnostico', 'examen', 'receta']
+        fields = ['id_cita', 'diagnostico', 'examen', 'receta', 'tipo_enf']
         widgets = {
             'diagnostico': forms.Textarea(attrs={'placeholder': 'Ingrese el Diagnóstico', }),
             'examen': forms.SelectMultiple(attrs={'class': 'form-control select2',
@@ -97,4 +97,5 @@ class ConsultaForm(forms.ModelForm):
             'receta': forms.SelectMultiple(attrs={'class': 'form-control select2',
                                                   'style': 'width: 100%',
                                                   'multiple': 'multiple'}),
+            'tipo_enf': forms.Select(),
         }

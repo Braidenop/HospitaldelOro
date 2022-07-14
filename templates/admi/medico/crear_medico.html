@@ -20,26 +20,26 @@
 							<div class="mb-3">
 								<label for="nombreUsuario" class="form-label">Nombre de Usuario:</label>
 								{{ usuarioForm.username |add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Ingrese el username' }}
-								{{ usuarioForm.username.errors }}
+								 <div class="alert-danger">{{ usuarioForm.username.errors}}</div>
 							</div>
 
                             <div class="mb-3">
                                     <label for="email" class="form-label">Correo:</label>
                                     {{ usuarioForm.email |add_class:'form-control'|attr:'placeholder:nombre@ejemplo.com' }}
-								    {{ usuarioForm.email.errors }}
+								    <div class="alert-danger">{{ usuarioForm.email.errors }}</div>
                             </div>
 
                             <div class="row">
                                 <div class="col">
                                     <label for="password" class="form-label">Contraseña:</label>
                                     {{ usuarioForm.password|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Ingrese una contraseña' }}
-								    {{ usuarioForm.password.errors }}
+								    <div class="alert-danger">{{ usuarioForm.password.errors }}</div>
                                 </div>
 
                                 <div class="col">
                                     <label for="password2" class="form-label">Repita la contraseña:</label>
                                     {{ usuarioForm.passwordCheck|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Repita la contraseña' }}
-    								{{ usuarioForm.passwordCheck.errors }}
+    								<div class="alert-danger">{{ usuarioForm.passwordCheck.errors }}</div>
                                 </div>
 
                             </div>
@@ -52,59 +52,64 @@
 								<div class="col">
 									<label for="first_name" class="form-label">Nombres:</label>
                                     {{ usuarioForm.first_name|add_class:'form-control'|attr:'placeholder:Ingrese los nombres del médico' }}
-									{{ usuarioForm.first_name.errors }}
+									<div class="alert-danger">{{ usuarioForm.first_name.errors }}</div>
 								</div>
                                 <div class="col">
 									<label for="last_name" class="form-label">Apellidos:</label>
                                     {{ usuarioForm.last_name|add_class:'form-control'|attr:'placeholder:Ingrese los apellidos del médico' }}
-									{{ usuarioForm.last_name.errors }}
+									<div class="alert-danger">{{ usuarioForm.last_name.errors }}</div>
 								</div>
 							</div>
                             <div class="row">
 								<div class="col">
 									<label for="cedula" class="form-label">Cédula:</label>
                                     {{ medicoForm.cedula|add_class:'form-control'|attr:'placeholder:Ingrese el número de cédula' }}
-									{{ medicoForm.cedula.errors }}
+									<div class="alert-danger">{{ medicoForm.cedula.errors }}</div>
 								</div>
                                 <div class="col">
 									<label for="direccion" class="form-label">Dirección:</label>
                                     {{ medicoForm.direccion|add_class:'form-control'|attr:'placeholder:Ingrese la dirección del médico' }}
-									{{ medicoForm.direccion.errors }}
+									<div class="alert-danger">{{ medicoForm.direccion.errors }}</div>
 								</div>
 							</div>
                             <div class="row">
 								<div class="col">
 									<label for="telefono" class="form-label">Celular:</label>
                                     {{ medicoForm.telefono|add_class:'form-control'|attr:'placeholder:Ingrese su número de celular' }}
-									{{ medicoForm.telefono.errors }}
+									<div class="alert-danger">{{ medicoForm.telefono.errors }}</div>
 								</div>
                                 <div class="col">
 									<label for="genero" class="form-label">Género:</label>
                                     {{ medicoForm.genero|add_class:'form-control' }}
-									{{ medicoForm.genero.errors }}
+									<div class="alert-danger">{{ medicoForm.genero.errors }}</div>
 								</div>
 							</div>
                             <div class="row">
                                 <div class="col">
 									<label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
-                                    {{ medicoForm.fecha_nacimiento }}
-									{{ medicoForm.fecha_nacimiento.errors }}
+                                    {{ medicoForm.fecha_nacimiento|add_class:'form-control' }}
+									<div class="alert-danger">{{ medicoForm.fecha_nacimiento.errors }}</div>
 								</div>
                                 <div class="col">
 									<label for="ciudad_red" class="form-label">Ciudad de Residencia:</label>
                                     {{ medicoForm.ciudad_red|add_class:'form-control' }}
-									{{ medicoForm.ciudad_red.errors }}
+									<div class="alert-danger">{{ medicoForm.ciudad_red.errors }}</div>
 								</div>
                             </div>
-							<div class="mb-3">
+
+							<div class="row">
+								<div class="col">
+                                <label for="image" class="form-label">Imagen de Perfil:</label>
                                 {{ usuarioForm.image|add_class:'form-control' }}
-                                {{ usuarioForm.image.errors }}
+                                <div class="alert-danger">{{ usuarioForm.image.errors }}</div>
+                                </div>
                             </div>
+
                             <div class="row">
 								<div class="col">
 									<label for="especialidad" class="form-label">Especialidad:</label>
                                     {{ medicoForm.esp|add_class:'form-control select2' }}
-									{{ medicoForm.telefono.errors }}
+									<div class="alert-danger">{{ medicoForm.telefono.errors }}</div>
 								</div>
                             </div>
 
